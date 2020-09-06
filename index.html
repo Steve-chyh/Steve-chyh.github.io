@@ -64,6 +64,56 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-python-game-III" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/09/06/python-game-III/" class="article-date">
+  <time datetime="2020-09-06T07:14:59.000Z" itemprop="datePublished">2020-09-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/09/06/python-game-III/">python-game-III</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Summary-of-the-antecedent"><a href="#Summary-of-the-antecedent" class="headerlink" title="Summary of the antecedent"></a>Summary of the antecedent</h3><hr>
+<p>In my last article, we changed the background color of the game window from black to gray and put all the Settings code in settings.py.In this blog, I will continue to work on the Alien Invasion game.</p>
+<h3 id="Add-spacecraft-images"><a href="#Add-spacecraft-images" class="headerlink" title="Add spacecraft images"></a>Add spacecraft images</h3><hr>
+<p>Now I’m going to add the ship to the game. In order to display the player’s ship on the screen, we’re going to load an image and draw it with blit().We can download images of the ship for free at <a href="http://pixabay.com/" target="_blank" rel="noopener">http://pixabay.com/</a>. Using bitmaps (.bmp) is easiest in PyGame, since pyGame loads bitmaps by default. To put our ship on the screen, we can create a SHIP module that is responsible for most of the ship’s behavior.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pygame</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Ship</span><span class="params">()</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,screen)</span>:</span></span><br><span class="line">		<span class="string">"""Initializes the ship and sets its initial position""</span></span><br><span class="line"><span class="string">		self.screen=screen</span></span><br><span class="line"><span class="string">		</span></span><br><span class="line"><span class="string">		#Load the ship image and load its external rectangles</span></span><br><span class="line"><span class="string">		self.image=pygame.image.load('images/ship.bmp')</span></span><br><span class="line"><span class="string">		self.rect=self.image.get_rect()</span></span><br><span class="line"><span class="string">		self.screen_rect=screen.get_rect()</span></span><br><span class="line"><span class="string">		</span></span><br><span class="line"><span class="string">		#Place each new ship in the bottom center of the screen</span></span><br><span class="line"><span class="string">		self.rect.centerx=self.screen_rect.centerx</span></span><br><span class="line"><span class="string">		self.rect.bottom=self.screen_rect.bottom</span></span><br><span class="line"><span class="string">		</span></span><br><span class="line"><span class="string">	def blitme(self):</span></span><br><span class="line"><span class="string">		"""</span>Draws the ship at the specified location<span class="string">"""</span></span><br><span class="line"><span class="string">		self.screen.blit(self.image,self.rect)</span></span><br></pre></td></tr></table></figure>
+
+<p>Next we’re going to update alien_invasion.py to let him create a spaceship.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> pygame</span><br><span class="line"><span class="keyword">from</span> settings <span class="keyword">import</span> Settings</span><br><span class="line"><span class="keyword">from</span> ship <span class="keyword">import</span> Ship</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run_game</span><span class="params">()</span>:</span></span><br><span class="line">	pygame.init()</span><br><span class="line">	ai_settings=Settings()</span><br><span class="line">	screen=pygame.display.set_mode(</span><br><span class="line">		(ai_settings.screen_width, ai_settings.screen_height))</span><br><span class="line">	pygame.display.set_caption(<span class="string">"Alien Invasion"</span>)</span><br><span class="line">	ship=Ship(screen)</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">		<span class="keyword">for</span> event <span class="keyword">in</span> pygame .event.get():</span><br><span class="line">			<span class="keyword">if</span> event.type==pygame.QUIT:</span><br><span class="line">				sys.exit()</span><br><span class="line">		<span class="comment">#Each loop redraws the screen</span></span><br><span class="line">		screen.fill(ai_setings.bg_color)</span><br><span class="line">		ship.blitme</span><br><span class="line">		</span><br><span class="line">		pygame.display.flip()</span><br><span class="line">run_game()</span><br></pre></td></tr></table></figure>
+
+<p>Now we can run the program and see our ship at the bottom of the window.</p>
+<h3 id="Next"><a href="#Next" class="headerlink" title="Next"></a>Next</h3><hr>
+<p>In my later blog Posts I’ll use the functions check_events() and update_screen() to simplify the program and try to start “piloting the ship”.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/09/06/python-game-III/" data-id="ckeqtgq3a0000b0v89zh4anap" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python-games/" rel="tag">python games</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Python-game-II" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/08/28/Python-game-II/" class="article-date">
@@ -293,7 +343,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
     </div>
   </div>
 
@@ -304,6 +354,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2020/09/06/python-game-III/">python-game-III</a>
+          </li>
         
           <li>
             <a href="/2020/08/28/Python-game-II/">Python_game II</a>
