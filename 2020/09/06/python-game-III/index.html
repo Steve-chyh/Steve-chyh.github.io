@@ -15,7 +15,7 @@
 <meta property="og:description" content="Summary of the antecedent In my last article, we changed the background color of the game window from black to gray and put all the Settings code in settings.py.In this blog, I will continue to work o">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-09-06T07:14:59.000Z">
-<meta property="article:modified_time" content="2020-09-06T08:10:22.674Z">
+<meta property="article:modified_time" content="2020-09-06T08:11:25.138Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="python games">
 <meta name="twitter:card" content="summary">
@@ -96,7 +96,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pygame</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Ship</span><span class="params">()</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,screen)</span>:</span></span><br><span class="line">		<span class="string">"""Initializes the ship and sets its initial position""</span></span><br><span class="line"><span class="string">		self.screen=screen</span></span><br><span class="line"><span class="string">		</span></span><br><span class="line"><span class="string">		#Load the ship image and load its external rectangles</span></span><br><span class="line"><span class="string">		self.image=pygame.image.load('images/ship.bmp')</span></span><br><span class="line"><span class="string">		self.rect=self.image.get_rect()</span></span><br><span class="line"><span class="string">		self.screen_rect=screen.get_rect()</span></span><br><span class="line"><span class="string">		</span></span><br><span class="line"><span class="string">		#Place each new ship in the bottom center of the screen</span></span><br><span class="line"><span class="string">		self.rect.centerx=self.screen_rect.centerx</span></span><br><span class="line"><span class="string">		self.rect.bottom=self.screen_rect.bottom</span></span><br><span class="line"><span class="string">		</span></span><br><span class="line"><span class="string">	def blitme(self):</span></span><br><span class="line"><span class="string">		"""</span>Draws the ship at the specified location<span class="string">"""</span></span><br><span class="line"><span class="string">		self.screen.blit(self.image,self.rect)</span></span><br></pre></td></tr></table></figure>
 
 <p>Next we’re going to update alien_invasion.py to let him create a spaceship.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> pygame</span><br><span class="line"><span class="keyword">from</span> settings <span class="keyword">import</span> Settings</span><br><span class="line"><span class="keyword">from</span> ship <span class="keyword">import</span> Ship</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run_game</span><span class="params">()</span>:</span></span><br><span class="line">	pygame.init()</span><br><span class="line">	ai_settings=Settings()</span><br><span class="line">	screen=pygame.display.set_mode(</span><br><span class="line">		(ai_settings.screen_width, ai_settings.screen_height))</span><br><span class="line">	pygame.display.set_caption(<span class="string">"Alien Invasion"</span>)</span><br><span class="line">	ship=Ship(screen)</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">		<span class="keyword">for</span> event <span class="keyword">in</span> pygame .event.get():</span><br><span class="line">			<span class="keyword">if</span> event.type==pygame.QUIT:</span><br><span class="line">				sys.exit()</span><br><span class="line">		<span class="comment">#Each loop redraws the screen</span></span><br><span class="line">		screen.fill(ai_setings.bg_color)</span><br><span class="line">		ship.blitme</span><br><span class="line">		</span><br><span class="line">		pygame.display.flip()</span><br><span class="line">run_game()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> pygame</span><br><span class="line"><span class="keyword">from</span> settings <span class="keyword">import</span> Settings</span><br><span class="line"><span class="keyword">from</span> ship <span class="keyword">import</span> Ship</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run_game</span><span class="params">()</span>:</span></span><br><span class="line">	pygame.init()</span><br><span class="line">	ai_settings=Settings()</span><br><span class="line">	screen=pygame.display.set_mode(</span><br><span class="line">		(ai_settings.screen_width, ai_settings.screen_height))</span><br><span class="line">	pygame.display.set_caption(<span class="string">"Alien Invasion"</span>)</span><br><span class="line">	ship=Ship(screen)</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">		<span class="keyword">for</span> event <span class="keyword">in</span> pygame .event.get():</span><br><span class="line">			<span class="keyword">if</span> event.type==pygame.QUIT:</span><br><span class="line">				sys.exit()</span><br><span class="line">		<span class="comment">#Each loop redraws the screen</span></span><br><span class="line">		screen.fill(ai_settings.bg_color)</span><br><span class="line">		ship.blitme()</span><br><span class="line">		</span><br><span class="line">		pygame.display.flip()</span><br><span class="line">run_game()</span><br></pre></td></tr></table></figure>
 
 <p>Now we can run the program and see our ship at the bottom of the window.</p>
 <h3 id="Next"><a href="#Next" class="headerlink" title="Next"></a>Next</h3><hr>
@@ -115,6 +115,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2020/09/20/python-game-IV/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          python_game_IV
+        
+      </div>
+    </a>
   
   
     <a href="/2020/08/28/Python-game-II/" id="article-nav-older" class="article-nav-link-wrap">
@@ -170,6 +179,10 @@
       <ul>
         
           <li>
+            <a href="/2020/09/20/python-game-IV/">python_game_IV</a>
+          </li>
+        
+          <li>
             <a href="/2020/09/06/python-game-III/">python-game-III</a>
           </li>
         
@@ -183,10 +196,6 @@
         
           <li>
             <a href="/2020/07/08/My-Biggest-Academic-Achievement/">My Biggest Academic Achievement</a>
-          </li>
-        
-          <li>
-            <a href="/2020/06/13/hello-world/">Hello World</a>
           </li>
         
       </ul>
