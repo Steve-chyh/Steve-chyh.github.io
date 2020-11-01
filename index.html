@@ -64,6 +64,60 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Python-game-V" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/11/01/Python-game-V/" class="article-date">
+  <time datetime="2020-11-01T06:05:47.000Z" itemprop="datePublished">2020-11-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/11/01/Python-game-V/">Python-game-V</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Summary-of-the-antecedent"><a href="#Summary-of-the-antecedent" class="headerlink" title="Summary of the antecedent"></a>Summary of the antecedent</h3><hr>
+<p>In my last article, I successfully used Function check_events() and Function update_screen() to simplifiy the program. In this blog, I’d like to make the aircraft to move.</p>
+<h3 id="Response-buttons"><a href="#Response-buttons" class="headerlink" title="Response buttons"></a>Response buttons</h3><hr>
+<p>Every time we press a button, we register an event in PyGame. Events are all fetched through the method pygame.event.get(), so in the function check_events(), we need to specify which types of events to check.Each keystroke is registered as a KEYDOWN event. When we detect a KEYBDOWN event, we check to see if the key that was pressed is specific.For example, if we press the right arrow key, we increase the rect.centerx value of the ship to move the ship to the right.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">game_functions.py</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> pygame</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">check_events</span><span class="params">(ship)</span>:</span></span><br><span class="line">	<span class="keyword">for</span> event <span class="keyword">in</span> pygame.event.get():</span><br><span class="line">		<span class="keyword">if</span> event.type== pygame.QUIT:</span><br><span class="line">			sys.exit()</span><br><span class="line">			</span><br><span class="line">		<span class="keyword">elif</span> event.type ==pygame.KEYDOWN:</span><br><span class="line">			<span class="keyword">if</span> event.key==pygame.K_RIGHT:</span><br><span class="line">				ship.rect.centerx += <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">update_screen</span><span class="params">(ai_settings,screen,ship)</span>:</span></span><br><span class="line">	screen.fill(ai_settings.bg_color)</span><br><span class="line">	ship.blitme()</span><br><span class="line">	pygame.display.flip()</span><br></pre></td></tr></table></figure>
+
+<h3 id="Allow-constant-movement"><a href="#Allow-constant-movement" class="headerlink" title="Allow constant movement"></a>Allow constant movement</h3><hr>
+<p>When we hold down the right arrow, we want the ship to keep moving to the right until the player releases it.We will have the game detect the Pygame.keyup event so that we know when the player releases the right arrow;We will then combine the KEYDOWN and KEYUP events with a flag called moving_right to achieve the continuous movement.(moving_right is a Boolean variable that is set to True when the right arrow key is held down)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ship.py</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pygame</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Ship</span><span class="params">()</span>:</span></span><br><span class="line">--snip--</span><br><span class="line">	self.moving_right=<span class="literal">False</span></span><br><span class="line">		</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">update</span><span class="params">(self)</span>:</span></span><br><span class="line">	<span class="keyword">if</span> self.moving_right:</span><br><span class="line">		self.rect.centrex +=<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">game_functions.py</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> pygame</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">check_events</span><span class="params">(ship)</span>:</span></span><br><span class="line">--snip--</span><br><span class="line"><span class="keyword">elif</span> event.type ==pygame.KEYDOWN:</span><br><span class="line">			<span class="keyword">if</span> event.key==pygame.K_RIGHT:</span><br><span class="line">				ship.moving_right=<span class="literal">True</span></span><br><span class="line">		</span><br><span class="line">		<span class="keyword">elif</span> event.type ==pygame.KEYUP:</span><br><span class="line">			<span class="keyword">if</span> event.key==pygame.K_RIGHT:</span><br><span class="line">				ship.moving_right=<span class="literal">False</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">alien_invasion.py</span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">		gf.check_events(ship)</span><br><span class="line">		ship.update()</span><br><span class="line">		gf.update_screen(ai_settings,screen,ship)</span><br></pre></td></tr></table></figure>
+
+<h3 id="Next"><a href="#Next" class="headerlink" title="Next"></a>Next</h3><hr>
+<p>In my next blog, I’d like to enable the ship to move both to the right and to the left.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/11/01/Python-game-V/" data-id="ckgyrey1w0000psv86r8t8l79" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python-games/" rel="tag">python games</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-python-game-IV" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/09/20/python-game-IV/" class="article-date">
@@ -399,7 +453,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
     </div>
   </div>
 
@@ -410,6 +464,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2020/11/01/Python-game-V/">Python-game-V</a>
+          </li>
         
           <li>
             <a href="/2020/09/20/python-game-IV/">python_game_IV</a>
@@ -425,10 +483,6 @@
         
           <li>
             <a href="/2020/08/12/Python-game/">Python game 1</a>
-          </li>
-        
-          <li>
-            <a href="/2020/07/08/My-Biggest-Academic-Achievement/">My Biggest Academic Achievement</a>
           </li>
         
       </ul>
