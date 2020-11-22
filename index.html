@@ -64,6 +64,56 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Python-game-VI" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/11/22/Python-game-VI/" class="article-date">
+  <time datetime="2020-11-22T11:00:14.000Z" itemprop="datePublished">2020-11-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/11/22/Python-game-VI/">Python-game-VI</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Summary-of-the-antecedent"><a href="#Summary-of-the-antecedent" class="headerlink" title="Summary of the antecedent"></a>Summary of the antecedent</h3><hr>
+<p>In my last article, I make the aircraft to right. In this blog, I’d like to enable the ship to move both to the right and to the left.</p>
+<h3 id="Allow-move-left-and-right"><a href="#Allow-move-left-and-right" class="headerlink" title="Allow move left and right"></a>Allow move left and right</h3><hr>
+<p>It is also easy to add the logic of moving to the left after the ship has been able to move continuously to the right.We’ll change the Ship class and function check_events() again.The relevant changes to the methods of the Ship class, –init– () and update (), are shown below.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">ship.py</span><br><span class="line"><span class="keyword">import</span> pygame</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Ship</span><span class="params">()</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,screen)</span>:</span></span><br><span class="line">		<span class="string">"""Initializes the ship and sets its initial position"""</span></span><br><span class="line">		self.screen=screen</span><br><span class="line">		</span><br><span class="line">		<span class="comment">#Load the ship image and load its external rectangles</span></span><br><span class="line">		self.image=pygame.image.load(<span class="string">'images/ship.bmp'</span>)</span><br><span class="line">		self.rect=self.image.get_rect()</span><br><span class="line">		self.screen_rect=screen.get_rect()</span><br><span class="line">		</span><br><span class="line">		<span class="comment">#Place each new ship in the bottom center of the screen</span></span><br><span class="line">		self.rect.centerx=self.screen_rect.centerx</span><br><span class="line">		self.rect.bottom=self.screen_rect.bottom</span><br><span class="line">		</span><br><span class="line">		self.moving_right=<span class="literal">False</span></span><br><span class="line">		self.moving_left=<span class="literal">False</span></span><br><span class="line">		</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">update</span><span class="params">(self)</span>:</span></span><br><span class="line">		<span class="keyword">if</span> self.moving_right:</span><br><span class="line">			self.rect.centrex +=<span class="number">1</span></span><br><span class="line">		<span class="keyword">if</span> self.moving_left:</span><br><span class="line">			self.rect.centrex -=<span class="number">1</span></span><br><span class="line">			</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">blitme</span><span class="params">(self)</span>:</span></span><br><span class="line">		<span class="string">"""Draws the ship at the specified location"""</span></span><br><span class="line">		self.screen.blit(self.image,self.rect)</span><br></pre></td></tr></table></figure>
+
+<p>We added self.moving_left, which we handled using if instead of elif, so that left and right did not take precedence.</p>
+<p>We now need to make two adjustments to check_events():</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">game_functions.py</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> pygame</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">check_events</span><span class="params">(ship)</span>:</span></span><br><span class="line">	<span class="keyword">for</span> event <span class="keyword">in</span> pygame.event.get():</span><br><span class="line">		<span class="keyword">if</span> event.type== pygame.QUIT:</span><br><span class="line">			sys.exit()</span><br><span class="line">			</span><br><span class="line">		<span class="keyword">elif</span> event.type ==pygame.KEYDOWN:</span><br><span class="line">			<span class="keyword">if</span> event.key==pygame.K_RIGHT:</span><br><span class="line">				ship.moving_right=<span class="literal">True</span></span><br><span class="line">			<span class="keyword">elif</span> event.key==pygame.K_LEFT:</span><br><span class="line">				ship.moving_left=<span class="literal">True</span></span><br><span class="line">		</span><br><span class="line">		<span class="keyword">elif</span> event.type ==pygame.KEYUP:</span><br><span class="line">			<span class="keyword">if</span> event.key==pygame.K_RIGHT:</span><br><span class="line">				ship.moving_right=<span class="literal">False</span></span><br><span class="line">			<span class="keyword">elif</span> event.key==pygame.K_LEFT:</span><br><span class="line">				ship.moving_left=<span class="literal">False</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Next"><a href="#Next" class="headerlink" title="Next"></a>Next</h3><hr>
+<p>In my next blog, I’d like to change the moving speed of my aircraft.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/11/22/Python-game-VI/" data-id="ckht1l67o0000l4v8fdo9333j" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python-games/" rel="tag">python games</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Python-game-V" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/11/01/Python-game-V/" class="article-date">
@@ -466,6 +516,10 @@
       <ul>
         
           <li>
+            <a href="/2020/11/22/Python-game-VI/">Python-game-VI</a>
+          </li>
+        
+          <li>
             <a href="/2020/11/01/Python-game-V/">Python-game-V</a>
           </li>
         
@@ -479,10 +533,6 @@
         
           <li>
             <a href="/2020/08/28/Python-game-II/">Python_game II</a>
-          </li>
-        
-          <li>
-            <a href="/2020/08/12/Python-game/">Python game 1</a>
           </li>
         
       </ul>
